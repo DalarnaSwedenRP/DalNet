@@ -38,7 +38,7 @@
     <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
         <section id="formSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Skapa din egen hemsida</h2>
-            <p class="text-gray-600 mb-6">Fyll i formuläret nedan för att skicka en begäran till Adrian.</p>
+            <p class="text-gray-600 mb-6">Fyll i formuläret nedan för att skapa en begäran. Kopiera sedan meddelandet och skicka det till Adrian via RP-chatten eller Messenger.</p>
             <div class="space-y-6">
                 <div>
                     <label for="pageName" class="block text-gray-600 mb-1 font-semibold">Namn på sidan</label>
@@ -75,18 +75,29 @@
                     id="submitButton"
                     class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition"
                 >
-                    Skicka till Adrian
+                    Generera meddelande till Adrian
                 </button>
                 <p id="formError" class="text-red-500 text-center hidden">Vänligen fyll i alla fält</p>
-                <p id="formSuccess" class="text-green-500 text-center hidden">Din begäran har skickats till Adrian!</p>
             </div>
         </section>
 
-        <section id="requestsSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Inskickade begäranden</h2>
-            <div id="requestsList" class="text-gray-600 leading-relaxed">
-                <p id="noRequests" class="text-gray-500">Inga begäranden har skickats än.</p>
+        <section id="messageSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Meddelande till Adrian</h2>
+            <p class="text-gray-600 mb-4">Kopiera texten nedan och skicka den till Adrian via RP-chatten eller Messenger:</p>
+            <div class="relative">
+                <textarea
+                    id="messageOutput"
+                    readonly
+                    class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 h-40 resize-none"
+                ></textarea>
+                <button
+                    id="copyButton"
+                    class="absolute top-2 right-2 bg-purple-600 text-white py-1 px-3 rounded-lg hover:bg-purple-700 transition"
+                >
+                    Kopiera
+                </button>
             </div>
+            <p class="text-gray-500 text-sm mt-2">Skicka detta till Adrian i RP-chatten eller via Discord/Messenger.</p>
         </section>
 
         <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
@@ -122,35 +133,9 @@
         const languageSelect = document.getElementById('language');
         const descriptionInput = document.getElementById('description');
         const formError = document.getElementById('formError');
-        const formSuccess = document.getElementById('formSuccess');
-        const requestsList = document.getElementById('requestsList');
-        const noRequests = document.getElementById('noRequests');
-
-        // Load saved requests from localStorage
-        const loadRequests = () => {
-            const requests = JSON.parse(localStorage.getItem('websiteRequests')) || [];
-            requestsList.innerHTML = '';
-            if (requests.length === 0) {
-                noRequests.classList.remove('hidden');
-            } else {
-                noRequests.classList.add('hidden');
-                requests.forEach((req, index) => {
-                    const requestItem = document.createElement('div');
-                    requestItem.className = 'p-4 bg-gray-50 rounded-lg mb-4 border border-gray-200';
-                    requestItem.innerHTML = `
-                        <h3 class="text-lg font-semibold text-gray-800">Begäran ${index + 1}</h3>
-                        <p><strong>Namn på sidan:</strong> ${req.pageName}</p>
-                        <p><strong>Språk:</strong> ${req.language}</p>
-                        <p><strong>Beskrivning:</strong> ${req.description}</p>
-                        <p><strong>Skickad:</strong> ${req.timestamp}</p>
-                    `;
-                    requestsList.appendChild(requestItem);
-                });
-            }
-        };
-
-        // Initial load of requests
-        loadRequests();
+        const messageSection = document.getElementById('messageSection');
+        const messageOutput = document.getElementById('messageOutput');
+        const copyButton = document.getElementById('copyButton');
 
         submitButton.addEventListener('click', () => {
             const pageName = pageNameInput.value.trim();
@@ -159,28 +144,30 @@
 
             if (pageName && language && description) {
                 formError.classList.add('hidden');
-                formSuccess.classList.remove('hidden');
+                messageSection.classList.remove('hidden');
 
-                // Save request to localStorage
-                const requests = JSON.parse(localStorage.getItem('websiteRequests')) || [];
+                // Generate message
                 const timestamp = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' });
-                requests.push({ pageName, language, description, timestamp });
-                localStorage.setItem('websiteRequests', JSON.stringify(requests));
+                const message = `Hej Adrian,\nJag vill skapa en ny hemsida för DalNet RP!\n\nNamn på sidan: ${pageName}\nSpråk: ${language}\nBeskrivning: ${description}\n\nSkickat: ${timestamp}`;
+                messageOutput.value = message;
 
-                // Update requests list
-                loadRequests();
-
-                // Clear form and show success message
-                setTimeout(() => {
-                    formSuccess.classList.add('hidden');
-                    pageNameInput.value = '';
-                    languageSelect.value = '';
-                    descriptionInput.value = '';
-                }, 3000);
+                // Clear form
+                pageNameInput.value = '';
+                languageSelect.value = '';
+                descriptionInput.value = '';
             } else {
                 formError.classList.remove('hidden');
-                formSuccess.classList.add('hidden');
+                messageSection.classList.add('hidden');
             }
+        });
+
+        copyButton.addEventListener('click', () => {
+            messageOutput.select();
+            document.execCommand('copy');
+            copyButton.textContent = 'Kopierat!';
+            setTimeout(() => {
+                copyButton.textContent = 'Kopiera';
+            }, 2000);
         });
     </script>
 </body>
