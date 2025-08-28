@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WindMail - DalNet RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        .hover-scale { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-scale:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .bg-mail { background: linear-gradient(to bottom, #1e40af, #60a5fa); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <header class="bg-mail text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">WindMail</h1>
+            <p class="text-center mt-2 text-blue-100 fade-in">Din e-posttjänst i DalNet RP-världen</p>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
+        <section id="loginSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Logga in på WindMail</h2>
+            <div class="space-y-4">
+                <input type="text" id="username" placeholder="Användarnamn" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" id="password" placeholder="Lösenord" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="loginButton" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Logga in</button>
+                <p id="loginError" class="text-red-500 text-center hidden">Fel användarnamn eller lösenord</p>
+            </div>
+        </section>
+
+        <section id="mailSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Välkommen till WindMail</h2>
+            <p id="mailWelcome" class="text-gray-600 leading-relaxed"></p>
+
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">Skicka meddelande</h3>
+                <input type="text" id="toEmail" placeholder="Ex: Savanna@windmail.se" class="w-full p-2 mb-2 border rounded">
+                <input type="text" id="message" placeholder="Skriv meddelande..." class="w-full p-2 mb-2 border rounded">
+                <button onclick="sendMessage()" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">Skicka</button>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">Inbox</h3>
+                <div id="inbox" class="border p-4 rounded max-h-64 overflow-y-auto bg-gray-50"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 WindMail. En del av DalNet RP.</p>
+        </div>
+    </footer>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
+    <script>
+        // 3️⃣ Anslut till Supabase
+        const supabaseUrl = "DIN_SUPABASE_URL";
+        const supabaseKey = "DIN_ANON_KEY"; // använd första key (anon)
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const loginSection = document.getElementById('loginSection');
+        const mailSection = document.getElementById('mailSection');
+        const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const mailWelcome = document.getElementById('mailWelcome');
+        const inboxDiv = document.getElementById('inbox');
+
+        // 4️⃣ Logga in / registrera
+        loginButton.addEventListener('click', async () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const email = username + "@windmail.se"; // intern e-post
+
+            // Försök logga in
+            let { data: loginData, error: loginErrorSup } = await supabase.auth.signInWithPassword({ email, password });
+            if (loginErrorSup) {
+                // Om konto saknas, registrera automatiskt
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
+                if (signUpError) { loginError.classList.remove('hidden'); return; }
+            }
+
+            // Visa mail-sektionen
+            loginSection.classList.add('hidden');
+            loginError.classList.add('hidden');
+            mailSection.classList.remove('hidden');
+            mailWelcome.textContent = `Välkommen, ${username}!`;
+
+            fetchInbox(); // hämta inbox direkt
+        });
+
+        // 5️⃣ Skicka meddelande
+        async function sendMessage() {
+            const toEmail = document.getElementById("toEmail").value.trim();
+            const messageText = document.getElementById("message").value.trim();
+            if (!toEmail || !messageText) return alert("Fyll i mottagare och meddelande");
+
+            // Hitta mottagare
+            const { data: userData } = await supabase
+                .from('users')
+                .select('id')
+                .eq('email', toEmail)
+                .single();
+
+            if (!userData) return alert("Användare finns inte");
+
+            const { data: user } = await supabase.auth.getUser();
+            const fromUserId = user.user.id;
+            const toUserId = userData.id;
+
+            const { error } = await supabase
+                .from('messages')
+                .insert([{ from_user_id: fromUserId, to_user_id: toUserId, message: messageText }]);
+
+            if (error) alert(error.message);
+            else {
+                alert("Meddelande skickat!");
+                document.getElementById("message").value = "";
+                fetchInbox();
+            }
+        }
+
+        // 6️⃣ Hämta inbox
+        async function fetchInbox() {
+            const { data: user } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data, error } = await supabase
+                .from('messages')
+                .select('message, from_user_id')
+                .eq('to_user_id', user.user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) return;
+
+            inboxDiv.innerHTML = "";
+            for (let msg of data) {
+                const p = document.createElement('p');
+                p.textContent = `${msg.message} (från: ${msg.from_user_id})`;
+                inboxDiv.appendChild(p);
+            }
+        }
+
+        // Hämta inbox automatiskt var 5:e sekund
+        setInterval(fetchInbox, 5000);
+    </script>
+</body>
+</html>
