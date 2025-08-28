@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DalNet RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-gray-100 min-h-screen flex flex-col font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold tracking-tight text-center">DalNet RP</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="text-center max-w-lg w-full">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-4 fade-in">Välkommen till DalNet RP</h2>
+            <p class="text-gray-600 mb-8 fade-in">Sök efter domäner eller tjänster i Dalarna RP-världen</p>
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Sök domän eller namn (t.ex. polisen.se eller polisen)"
+                    class="w-full p-4 rounded-full border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700"
+                >
+                <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <div id="searchResults" class="mt-6 space-y-3"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 DalNet RP. Skapad för en episk RP-upplevelse.</p>
+        </div>
+    </footer>
+
+    <script>
+        const pages = [
+            { name: "Polisen i Dalarna", url: "internet.polisen.html", keywords: ["polisen", "polis"] },
+            { name: "ICA i Dalarna", url: "internet.ica.html", keywords: ["ica", "butik"] },
+            { name: "Dalarna Nyheter", url: "internet.nyheter.html", keywords: ["nyheter", "dalarna nyheter"] },
+            { name: "Dalarna Bank", url: "internet.banken.html", keywords: ["banken", "bank"] }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            searchResults.innerHTML = '';
+
+            if (query === '') return;
+
+            // Check for exact domain match
+            const exactMatch = pages.find(page => query === page.url);
+            if (exactMatch) {
+                window.location.href = exactMatch.url;
+                return;
+            }
+
+            // Filter pages based on keywords or name
+            const results = pages.filter(page =>
+                page.name.toLowerCase().includes(query) ||
+                page.keywords.some(keyword => keyword.includes(query))
+            );
+
+            // Display results
+            if (results.length > 0) {
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'p-3 bg-white rounded-lg shadow hover-scale fade-in';
+                    resultItem.innerHTML = `<a href="${result.url}" class="text-blue-600 hover:text-blue-800">${result.name}</a>`;
+                    searchResults.appendChild(resultItem);
+                });
+            } else {
+                searchResults.innerHTML = '<p class="text-gray-500 fade-in">Inga resultat hittades</p>';
+            }
+        });
+    </script>
+</body>
+</html>
