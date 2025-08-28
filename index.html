@@ -38,7 +38,7 @@
                 <input
                     type="text"
                     id="searchInput"
-                    placeholder="Sök domän eller namn (t.ex. polisen.se eller polisen)"
+                    placeholder="Sök domän eller namn (t.ex. polisen.se eller polisen) och tryck Enter"
                     class="w-full p-4 rounded-full border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700"
                 >
                 <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,39 +71,41 @@
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
 
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim().toLowerCase();
-            searchResults.innerHTML = '';
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const query = this.value.trim().toLowerCase();
+                searchResults.innerHTML = '';
 
-            if (query === '') return;
+                if (query === '') return;
 
-            // Check for exact domain match (e.g., polisen.se or polisen.se.html)
-            const exactMatch = pages.find(page => 
-                query === page.url || 
-                query === page.url.replace('.html', '') ||
-                query + '.html' === page.url
-            );
-            if (exactMatch) {
-                window.location.href = exactMatch.url;
-                return;
-            }
+                // Check for exact domain match (e.g., polisen.se or polisen.se.html)
+                const exactMatch = pages.find(page => 
+                    query === page.url || 
+                    query === page.url.replace('.html', '') ||
+                    query + '.html' === page.url
+                );
+                if (exactMatch) {
+                    window.location.href = exactMatch.url;
+                    return;
+                }
 
-            // Filter pages based on keywords or name
-            const results = pages.filter(page =>
-                page.name.toLowerCase().includes(query) ||
-                page.keywords.some(keyword => keyword.toLowerCase().includes(query))
-            );
+                // Filter pages based on keywords or name
+                const results = pages.filter(page =>
+                    page.name.toLowerCase().includes(query) ||
+                    page.keywords.some(keyword => keyword.toLowerCase().includes(query))
+                );
 
-            // Display results
-            if (results.length > 0) {
-                results.forEach(result => {
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'p-3 bg-white rounded-lg shadow hover-scale fade-in';
-                    resultItem.innerHTML = `<a href="${result.url}" class="text-blue-600 hover:text-blue-800">${result.name}</a>`;
-                    searchResults.appendChild(resultItem);
-                });
-            } else {
-                searchResults.innerHTML = '<p class="text-gray-500 fade-in">Inga resultat hittades</p>';
+                // Display results
+                if (results.length > 0) {
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'p-3 bg-white rounded-lg shadow hover-scale fade-in';
+                        resultItem.innerHTML = `<a href="${result.url}" class="text-blue-600 hover:text-blue-800">${result.name}</a>`;
+                        searchResults.appendChild(resultItem);
+                    });
+                } else {
+                    searchResults.innerHTML = '<p class="text-gray-500 fade-in">Inga resultat hittades</p>';
+                }
             }
         });
     </script>
