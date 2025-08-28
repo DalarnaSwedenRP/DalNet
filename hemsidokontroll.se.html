@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hemsidokontroll - DalNet RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .bg-control {
+            background: linear-gradient(to bottom, #4b5563, #9ca3af);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <!-- Header -->
+    <header class="bg-control text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">Hemsidokontroll</h1>
+            <p class="text-center mt-2 text-gray-300 fade-in">Hantera dina hemsidor i DalNet RP</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
+        <section id="loginSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Logga in för att hantera dina hemsidor</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-gray-600 mb-1">Användarnamn</label>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="T.ex. AdrianMunter"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-600 mb-1">Lösenord</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Ange ditt lösenord"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                </div>
+                <button
+                    id="loginButton"
+                    class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition"
+                >
+                    Logga in
+                </button>
+                <p id="loginError" class="text-red-500 text-center hidden">Fel användarnamn eller lösenord</p>
+            </div>
+        </section>
+
+        <section id="websitesSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Dina hemsidor</h2>
+            <div id="websitesList" class="space-y-4"></div>
+        </section>
+
+        <section id="websiteDetails" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4" id="websiteTitle"></h2>
+            <div class="space-y-4">
+                <p id="websiteName" class="text-gray-600"></p>
+                <p id="websiteHost" class="text-gray-600"></p>
+                <p id="websiteDomain" class="text-gray-600"></p>
+                <a id="addDomainLink" href="#" target="_blank" class="text-blue-600 hover:underline">Lägg till ny domän</a>
+                <p id="websiteStatus" class="text-gray-600"></p> <!-- Extra: Status -->
+                <p id="websiteLastUpdated" class="text-gray-600"></p> <!-- Extra: Senast uppdaterad -->
+            </div>
+            <button id="backButton" class="mt-6 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition">Tillbaka till lista</button>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Om Hemsidokontroll</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Hemsidokontroll är din portal för att hantera alla dina hemsidor i DalNet RP. Logga in för att se och uppdatera din information.
+            </p>
+        </section>
+
+        <div class="text-center">
+            <a href="index.html" class="inline-block bg-gray-600 text-white py-3 px-6 rounded-full hover:bg-gray-700 transition fade-in">Tillbaka till startsidan</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 Hemsidokontroll. En del av DalNet RP.</p>
+        </div>
+    </footer>
+
+    <script>
+        const accounts = [
+            { 
+                name: "Adrian", 
+                username: "AdrianMunter", 
+                password: "1379",
+                websites: [
+                    { 
+                        name: "Adriens Företagssida", 
+                        host: "DalNet Hosting", 
+                        domain: "adriensforetag.se", 
+                        status: "Aktiv", 
+                        lastUpdated: "2025-08-20"
+                    },
+                    { 
+                        name: "Adriens Personliga Blogg", 
+                        host: "DalNet Hosting", 
+                        domain: "adriensblogg.se", 
+                        status: "Aktiv", 
+                        lastUpdated: "2025-08-15"
+                    }
+                ]
+            },
+            { 
+                name: "Benjamin", 
+                username: "BenjaminMunter", 
+                password: "12358",
+                websites: [
+                    { 
+                        name: "Benjamins Butik", 
+                        host: "RP Host Pro", 
+                        domain: "benjaminsbutik.se", 
+                        status: "Aktiv", 
+                        lastUpdated: "2025-07-10"
+                    }
+                ]
+            },
+            { 
+                name: "Savanna", 
+                username: "SavannaKolmodin", 
+                password: "7895",
+                websites: [] // Tom template för ingen hemsida
+            },
+            { 
+                name: "Emil", 
+                username: "EmilKarlsson", 
+                password: "546852",
+                websites: [
+                    { 
+                        name: "Emils Projekt", 
+                        host: "DalNet Hosting", 
+                        domain: "emilsprojekt.se", 
+                        status: "Inaktiv", 
+                        lastUpdated: "2025-06-05"
+                    }
+                ]
+            }
+        ];
+
+        const loginSection = document.getElementById('loginSection');
+        const websitesSection = document.getElementById('websitesSection');
+        const websiteDetails = document.getElementById('websiteDetails');
+        const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const websitesList = document.getElementById('websitesList');
+        const websiteTitle = document.getElementById('websiteTitle');
+        const websiteName = document.getElementById('websiteName');
+        const websiteHost = document.getElementById('websiteHost');
+        const websiteDomain = document.getElementById('websiteDomain');
+        const addDomainLink = document.getElementById('addDomainLink');
+        const websiteStatus = document.getElementById('websiteStatus');
+        const websiteLastUpdated = document.getElementById('websiteLastUpdated');
+        const backButton = document.getElementById('backButton');
+
+        let currentUserWebsites = [];
+
+        loginButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            const account = accounts.find(
+                acc => acc.username === username && acc.password === password
+            );
+
+            if (account) {
+                loginSection.classList.add('hidden');
+                loginError.classList.add('hidden');
+                websitesSection.classList.remove('hidden');
+                currentUserWebsites = account.websites;
+
+                websitesList.innerHTML = '';
+                if (currentUserWebsites.length === 0) {
+                    websitesList.innerHTML = '<p class="text-gray-600">Du har inga hemsidor registrerade.</p>';
+                } else {
+                    currentUserWebsites.forEach((website, index) => {
+                        const listItem = document.createElement('div');
+                        listItem.className = 'p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100';
+                        listItem.textContent = website.name;
+                        listItem.addEventListener('click', () => showWebsiteDetails(index));
+                        websitesList.appendChild(listItem);
+                    });
+                }
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        function showWebsiteDetails(index) {
+            const website = currentUserWebsites[index];
+            websiteTitle.textContent = website.name;
+            websiteName.textContent = `Namn på sidan: ${website.name}`;
+            websiteHost.textContent = `Vilken host: ${website.host}`;
+            websiteDomain.textContent = `Nuvarande domän: ${website.domain}`;
+            addDomainLink.href = "https://docs.google.com/forms/d/e/[DIN_GOOGLE_FORMS_ID]/viewform"; // Ersätt med din Google Forms-URL
+            websiteStatus.textContent = `Status: ${website.status}`;
+            websiteLastUpdated.textContent = `Senast uppdaterad: ${website.lastUpdated}`;
+
+            websitesSection.classList.add('hidden');
+            websiteDetails.classList.remove('hidden');
+        }
+
+        backButton.addEventListener('click', () => {
+            websiteDetails.classList.add('hidden');
+            websitesSection.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
