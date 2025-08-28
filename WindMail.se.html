@@ -26,10 +26,10 @@
         <section id="loginSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Logga in på WindMail</h2>
             <div class="space-y-4">
-                <input type="text" id="username" placeholder="Användarnamn" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="email" placeholder="E-post (t.ex. adrianmunter@windmail.se)" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <input type="password" id="password" placeholder="Lösenord" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button id="loginButton" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Logga in</button>
-                <p id="loginError" class="text-red-500 text-center hidden">Fel användarnamn eller lösenord</p>
+                <p id="loginError" class="text-red-500 text-center hidden">Fel e-post eller lösenord</p>
             </div>
         </section>
 
@@ -37,7 +37,20 @@
         <section id="mailSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Välkommen till WindMail</h2>
             <p id="mailWelcome" class="text-gray-600 leading-relaxed"></p>
-            <p class="text-gray-600 mt-4">Här kan du hantera dina meddelanden i DalNet RP-världen.</p>
+
+            <!-- Skicka Meddelande -->
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">Skicka meddelande</h3>
+                <input type="text" id="toEmail" placeholder="Ex: savannakolmodin@windmail.se" class="w-full p-2 mb-2 border rounded">
+                <input type="text" id="message" placeholder="Skriv meddelande..." class="w-full p-2 mb-2 border rounded">
+                <button onclick="sendMessage()" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">Skicka</button>
+            </div>
+
+            <!-- Inbox -->
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">Inbox</h3>
+                <div id="inbox" class="border p-4 rounded max-h-64 overflow-y-auto bg-gray-50"></div>
+            </div>
         </section>
 
         <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
@@ -66,39 +79,127 @@
         </div>
     </footer>
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
-        const accounts = [
-            { name: "Adrian", username: "AdrianMunter", password: "1379" },
-            { name: "Benjamin", username: "BenjaminMunter", password: "12358" },
-            { name: "Savanna", username: "SavannaKolmodin", password: "7895" },
-            { name: "Emil", username: "EmilKarlsson", password: "546852" }
-        ];
+        // Supabase connection
+        const supabaseUrl = "https://cqdkxjlhtjccazceagyn.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxZGt4amxodGpjY2F6Y2VhZ3luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzODg3MzQsImV4cCI6MjA3MTk2NDczNH0.nTNlqOZ99CXiEPZFzz6vY5tHtJMhN7y6f_YjsDdeOPs";
+        const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
         const loginSection = document.getElementById('loginSection');
         const mailSection = document.getElementById('mailSection');
         const loginButton = document.getElementById('loginButton');
-        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginError = document.getElementById('loginError');
         const mailWelcome = document.getElementById('mailWelcome');
+        const inboxDiv = document.getElementById('inbox');
 
-        loginButton.addEventListener('click', () => {
-            const username = usernameInput.value.trim();
+        // Förregistrerade interna användare
+        const users = [
+            { name: "Adrian Munter", email: "adrianmunter@windmail.se", password: "1379" },
+            { name: "Benjamin Munter", email: "benjaminmunter@windmail.se", password: "12358" },
+            { name: "Savanna Kolmodin", email: "savannakolmodin@windmail.se", password: "7895" },
+            { name: "Emil Bäcklund", email: "emilbacklund@windmail.se", password: "546852" },
+            { name: "Polisen", email: "polisen@polisen.se", password: "polis123" }
+        ];
+
+        // Logga in
+        loginButton.addEventListener('click', async () => {
+            const email = emailInput.value.trim().toLowerCase();
             const password = passwordInput.value.trim();
 
-            const account = accounts.find(
-                acc => acc.username === username && acc.password === password
-            );
-
-            if (account) {
-                loginSection.classList.add('hidden');
-                loginError.classList.add('hidden');
-                mailSection.classList.remove('hidden');
-                mailWelcome.textContent = `Välkommen, ${account.name}!`;
-            } else {
+            if (!email || !password) {
+                loginError.textContent = "Fyll i e-post och lösenord";
                 loginError.classList.remove('hidden');
+                return;
             }
+
+            // Försök logga in
+            const { data: loginData, error: loginErrorSup } = await supabase.auth.signInWithPassword({ email, password });
+            if (loginErrorSup) {
+                loginError.textContent = "Fel e-post eller lösenord";
+                loginError.classList.remove('hidden');
+                return;
+            }
+
+            loginSection.classList.add('hidden');
+            loginError.classList.add('hidden');
+            mailSection.classList.remove('hidden');
+
+            const userObj = users.find(u => u.email.toLowerCase() === email);
+            mailWelcome.textContent = `Välkommen, ${userObj ? userObj.name : email}!`;
+
+            fetchInbox();
         });
+
+        // Skicka meddelande
+        async function sendMessage() {
+            const toEmail = document.getElementById("toEmail").value.trim().toLowerCase();
+            const messageText = document.getElementById("message").value.trim();
+            if (!toEmail || !messageText) {
+                alert("Fyll i mottagare och meddelande");
+                return;
+            }
+
+            // Hitta mottagare i Supabase
+            const { data: userData } = await supabase
+                .from('users')
+                .select('id')
+                .eq('email', toEmail)
+                .single();
+
+            if (!userData) {
+                alert("Användare finns inte");
+                return;
+            }
+
+            const { data: user } = await supabase.auth.getUser();
+            const fromUserId = user.user.id;
+            const toUserId = userData.id;
+
+            const { error } = await supabase
+                .from('messages')
+                .insert([{ from_user_id: fromUserId, to_user_id: toUserId, message: messageText }]);
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert("Meddelande skickat!");
+                document.getElementById("message").value = "";
+                fetchInbox();
+            }
+        }
+
+        // Hämta inbox
+        async function fetchInbox() {
+            const { data: user } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data, error } = await supabase
+                .from('messages')
+                .select('message, from_user_id')
+                .eq('to_user_id', user.user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            inboxDiv.innerHTML = "";
+            for (let msg of data) {
+                const fromUser = users.find(u => u.email === msg.from_user_id) || { name: msg.from_user_id };
+                const p = document.createElement('p');
+                p.textContent = `${msg.message} (från: ${fromUser.name})`;
+                inboxDiv.appendChild(p);
+            }
+        }
+
+        // Auto-refresh inbox var 5:e sekund
+        setInterval(fetchInbox, 5000);
     </script>
 </body>
 </html>
