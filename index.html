@@ -58,14 +58,14 @@
 
     <script>
         const pages = [
-            { name: "Polismyndigheten", url: "polisen.se.html", keywords: ["polisen", "polis"] },
-            { name: "DalarnaBanken", url: "DalarnaBanken.se.html", keywords: ["DalarnaBanken", "Bank", "Pengar", "Banken", "Money", ] },
-            { name: "SkapaHemsida", url: "skapahemsida.se.html", keywords: ["Skapa", "Hemsida", "SkapaHemsida", "Göra Hemsida", "Egen Hemsida", ] },
-            { name: "DalaJuristerna", url: "DalaJuristerna.se.html", keywords: ["Juristerna", "Advokat", "DalaJuristerna", "AdvokatByrå", ] },
-            { name: "RegionDalarna", url: "RegionDalarna.se.html", keywords: ["Region", "Dalarna", "RegionDalarna", "Hjälp-I-Dalarna", ] },
-            { name: "KopDoman", url: "KöpDomän.se.html", keywords: ["Domain", "KopDomain", "Domains", "KöpDomän", ] },
-            { name: "WindMail", url: "WindMail.se.html", keywords: ["Wind", "Mail", "Email", "Maila", ] },
-            { name: "Hemsidokontroll", url: "hemsidokontroll.se.html", keywords: ["Hemsida", "Hemsidor", "Kontroll", "Inställningar-Över-Hemsida", ] },
+            { name: "Polismyndigheten", url: "polisen.se.html", keywords: ["polisen", "polis", "polisen.se"] },
+            { name: "DalarnaBanken", url: "DalarnaBanken.se.html", keywords: ["dalarnabanken", "bank", "pengar", "banken", "money", "dalarnabanken.se"] },
+            { name: "SkapaHemsida", url: "skapahemsida.se.html", keywords: ["skapa", "hemsida", "skapahemsida", "göra hemsida", "egen hemsida", "skapahemsida.se"] },
+            { name: "DalaJuristerna", url: "DalaJuristerna.se.html", keywords: ["juristerna", "advokat", "dalajuristerna", "advokatbyrå", "dalajuristerna.se"] },
+            { name: "RegionDalarna", url: "RegionDalarna.se.html", keywords: ["region", "dalarna", "regiondalarna", "hjälp-i-dalarna", "regiondalarna.se"] },
+            { name: "KöpDomän", url: "KöpDomän.se.html", keywords: ["domain", "köpdomän", "domains", "köp domän", "köpdomän.se"] },
+            { name: "WindMail", url: "WindMail.se.html", keywords: ["wind", "mail", "email", "maila", "windmail", "windmail.se"] },
+            { name: "Hemsidokontroll", url: "hemsidokontroll.se.html", keywords: ["hemsida", "hemsidor", "kontroll", "inställningar-över-hemsida", "hemsidokontroll", "hemsidokontroll.se"] }
         ];
 
         const searchInput = document.getElementById('searchInput');
@@ -77,8 +77,12 @@
 
             if (query === '') return;
 
-            // Check for exact domain match
-            const exactMatch = pages.find(page => query === page.url);
+            // Check for exact domain match (e.g., polisen.se or polisen.se.html)
+            const exactMatch = pages.find(page => 
+                query === page.url || 
+                query === page.url.replace('.html', '') ||
+                query + '.html' === page.url
+            );
             if (exactMatch) {
                 window.location.href = exactMatch.url;
                 return;
@@ -87,7 +91,7 @@
             // Filter pages based on keywords or name
             const results = pages.filter(page =>
                 page.name.toLowerCase().includes(query) ||
-                page.keywords.some(keyword => keyword.includes(query))
+                page.keywords.some(keyword => keyword.toLowerCase().includes(query))
             );
 
             // Display results
