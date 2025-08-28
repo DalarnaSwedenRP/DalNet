@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dalarna Bank - DalNet RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .bg-bank {
+            background: linear-gradient(to bottom, #1e3a8a, #10b981);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <!-- Header -->
+    <header class="bg-bank text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">Dalarna Bank</h1>
+            <p class="text-center mt-2 text-emerald-100 fade-in">Din pålitliga partner i DalNet RP</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
+        <section id="loginSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Logga in</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-gray-600 mb-1">Användarnamn</label>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="T.ex. AdrianMunter"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-600 mb-1">Lösenord</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Ange ditt lösenord"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+                <button
+                    id="loginButton"
+                    class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition"
+                >
+                    Logga in
+                </button>
+                <p id="loginError" class="text-red-500 text-center hidden">Fel användarnamn eller lösenord</p>
+            </div>
+        </section>
+
+        <section id="accountSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Ditt konto</h2>
+            <p id="accountInfo" class="text-gray-600 leading-relaxed"></p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Om Dalarna Bank</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Dalarna Bank är din pålitliga partner för ekonomi i DalNet RP. Vi erbjuder lån, sparkonton och säkra transaktioner för alla spelare.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Tjänster</h2>
+            <p class="text-gray-600 leading-relaxed">
+                - Öppna ett konto och få 500 RP-valuta i välkomstbonus.<br>
+                - Lån för bilköp och bostäder tillgängliga.<br>
+                - Säkra transaktioner via vår RP-bankapp.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Kontakt</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Besök oss i centrala Avesta eller kontakta oss via RP-bankappen.<br>
+                <strong>Support:</strong> Kontakta oss via RP-chatten eller Discord.
+            </p>
+        </section>
+
+        <div class="text-center">
+            <a href="index.html" class="inline-block bg-emerald-600 text-white py-3 px-6 rounded-full hover:bg-emerald-700 transition fade-in">Tillbaka till startsidan</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 Dalarna Bank. Skapad för en episk RP-upplevelse.</p>
+        </div>
+    </footer>
+
+    <script>
+        const accounts = [
+            { name: "Adrian", username: "AdrianMunter", password: "1379", balance: 0 },
+            { name: "Benjamin", username: "BenjaminMunter", password: "12358", balance: 0 },
+            { name: "Savanna", username: "SavannaKolmodin", password: "7895", balance: 0 },
+            { name: "Emil", username: "Emil", password: "546852", balance: 0 }
+        ];
+
+        const loginSection = document.getElementById('loginSection');
+        const accountSection = document.getElementById('accountSection');
+        const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const accountInfo = document.getElementById('accountInfo');
+
+        loginButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            const account = accounts.find(
+                acc => acc.username === username && acc.password === password
+            );
+
+            if (account) {
+                loginSection.classList.add('hidden');
+                loginError.classList.add('hidden');
+                accountSection.classList.remove('hidden');
+                accountInfo.innerHTML = `
+                    <strong>Välkommen, ${account.name}!</strong><br>
+                    Ditt saldo: <span class="text-emerald-600 font-bold">${account.balance} RP-valuta</span>
+                `;
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
