@@ -95,12 +95,14 @@
                     page.keywords.some(keyword => keyword.toLowerCase().includes(query))
                 );
 
-                // Display results
+                // Display results without .se in the name
                 if (results.length > 0) {
                     results.forEach(result => {
                         const resultItem = document.createElement('div');
                         resultItem.className = 'p-3 bg-white rounded-lg shadow hover-scale fade-in';
-                        resultItem.innerHTML = `<a href="${result.url}" class="text-blue-600 hover:text-blue-800">${result.name}</a>`;
+                        // Remove .se from the displayed name
+                        const displayName = result.name.replace(/\.se$/i, '');
+                        resultItem.innerHTML = `<a href="${result.url}" class="text-blue-600 hover:text-blue-800">${displayName}</a>`;
                         searchResults.appendChild(resultItem);
                     });
                 } else {
