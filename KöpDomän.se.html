@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domänköp - DalNet RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .bg-domain {
+            background: linear-gradient(to bottom, #0f766e, #2dd4bf);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <!-- Header -->
+    <header class="bg-domain text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">Domänköp</h1>
+            <p class="text-center mt-2 text-teal-100 fade-in">Skaffa din egen domän i DalNet RP-världen</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Köp din domän</h2>
+            <p class="text-gray-600 mb-6">Fyll i formuläret nedan för att registrera din domän i DalNet RP. Välj din domän och skicka in din beställning!</p>
+            <div class="w-full overflow-x-auto">
+                <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSfeAQG13TWKIPr1WeimCr5zz4o_4CHxDl2WnpCV95OjqdYhCQ/viewform?embedded=true"
+                    width="100%"
+                    height="382"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                    class="rounded-lg"
+                >Läser in…</iframe>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Om Domänköp</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Med Domänköp kan du säkra din egen plats på DalNet RP-internet. Välj en unik domän som passar din roll i spelet, från företag till personliga projekt. Alla domäner hanteras av vårt team för en smidig upplevelse.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Priser</h2>
+            <p class="text-gray-600 leading-relaxed">
+                - Standarddomän: 500 RP-valuta/år<br>
+                - Premiumdomän: 1000 RP-valuta/år<br>
+                - Kontakta oss för specialdomäner eller bulk-köp!
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Kontakt</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Har du frågor om domänköp? Kontakta vårt team via RP-chatten eller Discord.<br>
+                <strong>Support:</strong> Skicka ett meddelande i DalNet RP-communityt.
+            </p>
+        </section>
+
+        <div class="text-center">
+            <a href="index.html" class="inline-block bg-teal-600 text-white py-3 px-6 rounded-full hover:bg-teal-700 transition fade-in">Tillbaka till startsidan</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 Domänköp. En del av DalNet RP.</p>
+        </div>
+    </footer>
+</body>
+</html>
