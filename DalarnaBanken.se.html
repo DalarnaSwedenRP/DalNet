@@ -69,7 +69,9 @@
 
         <section id="accountSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Ditt konto</h2>
-            <p id="accountInfo" class="text-gray-600 leading-relaxed"></p>
+            <p id="accountInfo" class="text-gray-600 leading-relaxed mb-4"></p>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Transaktioner</h3>
+            <div id="transactions" class="text-gray-600"></div>
         </section>
 
         <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
@@ -109,10 +111,42 @@
 
     <script>
         const accounts = [
-            { name: "Adrian", username: "AdrianMunter", password: "1379", balance: 0 },
-            { name: "Benjamin", username: "BenjaminMunter", password: "12358", balance: 0 },
-            { name: "Savanna", username: "SavannaKolmodin", password: "7895", balance: 0 },
-            { name: "Emil", username: "Emil", password: "546852", balance: 0 }
+            {
+                name: "Adrian Munter",
+                username: "AdrianMunter",
+                password: "1379",
+                balance: 0,
+                transactions: [
+                    {
+                        productName: "Testprodukt",
+                        to: "Testföretag",
+                        amount: 1000,
+                        paid: true,
+                        date: "2025-08-29"
+                    }
+                ]
+            },
+            {
+                name: "Benjamin",
+                username: "BenjaminMunter",
+                password: "12358",
+                balance: 0,
+                transactions: []
+            },
+            {
+                name: "Savanna",
+                username: "SavannaKolmodin",
+                password: "7895",
+                balance: 0,
+                transactions: []
+            },
+            {
+                name: "Emil",
+                username: "Emil",
+                password: "546852",
+                balance: 0,
+                transactions: []
+            }
         ];
 
         const loginSection = document.getElementById('loginSection');
@@ -122,6 +156,7 @@
         const passwordInput = document.getElementById('password');
         const loginError = document.getElementById('loginError');
         const accountInfo = document.getElementById('accountInfo');
+        const transactionsDiv = document.getElementById('transactions');
 
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
@@ -139,23 +174,41 @@
                     <strong>Välkommen, ${account.name}!</strong><br>
                     Ditt saldo: <span class="text-emerald-600 font-bold">${account.balance}kr</span>
                 `;
+                if (account.transactions.length > 0) {
+                    let transactionsHtml = '<ul class="space-y-4">';
+                    account.transactions.forEach(t => {
+                        transactionsHtml += `
+                            <li class="border-b border-gray-200 pb-2">
+                                <strong>Namn på produkt:</strong> ${t.productName}<br>
+                                <strong>Till:</strong> ${t.to}<br>
+                                <strong>Summa:</strong> ${t.amount}kr<br>
+                                <strong>Betalat:</strong> ${t.paid ? 'Ja' : 'Nej'}<br>
+                                <strong>Datum:</strong> ${t.date}<br>
+                            </li>
+                        `;
+                    });
+                    transactionsHtml += '</ul>';
+                    transactionsDiv.innerHTML = transactionsHtml;
+                } else {
+                    transactionsDiv.innerHTML = '<p class="text-gray-600">Inga transaktioner att visa.</p>';
+                }
             } else {
                 loginError.classList.remove('hidden');
             }
         });
     </script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68b084f225311e19212dca45/1j3ooekvk';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/68b084f225311e19212dca45/1j3ooekvk';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </body>
 </html>
