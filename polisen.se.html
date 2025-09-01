@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polisen i Dalarna</title>
+    <title>Polisen.se - Demo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -25,56 +25,163 @@
         }
     </style>
 </head>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68b08d1f3213281928263265/1j3oqehc3';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-    <body class="bg-gray-100 min-h-screen flex flex-col font-sans">
-    <!-- Header -->
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <!-- Banner -->
     <header class="bg-police text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-8">
-            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">Polisen i Dalarna</h1>
-            <p class="text-center mt-2 text-blue-100 fade-in">Din trygghet i Dalarna</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-center fade-in">Polisen.se</h1>
+            <p class="text-center mt-2 text-blue-100 fade-in">Din trygghet i hela Sverige</p>
         </div>
     </header>
 
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="max-w-7xl mx-auto flex justify-center space-x-6">
+            <a onclick="showSection('home')" class="hover:text-blue-200 cursor-pointer">Startsida</a>
+            <a onclick="showSection('tips')" class="hover:text-blue-200 cursor-pointer">Tipsa polisen</a>
+            <a onclick="showSection('contact')" class="hover:text-blue-200 cursor-pointer">Kontakt</a>
+            <a onclick="showSection('faq')" class="hover:text-blue-200 cursor-pointer">Vanliga frågor</a>
+            <a onclick="showSection('emergency')" class="hover:text-blue-200 cursor-pointer">Nödsituationer</a>
+            <a onclick="showSection('login')" class="hover:text-blue-200 cursor-pointer">Intern sida</a>
+        </div>
+    </nav>
+
     <!-- Main Content -->
     <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
-        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Om oss</h2>
-            <p class="text-gray-600 leading-relaxed">
-                Polisen i Dalarna arbetar dygnet runt för att upprätthålla lag och ordning i Dalarna. Vi patrullerar gatorna, hanterar brott och ser till att medborgarna i Dalarna känner sig trygga. Vårt mål är att skapa en rättvis och säker miljö för alla männsikor.
-            </p>
+        <section id="home" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Välkommen till Polisen.se</h2>
+            <p class="text-gray-600 leading-relaxed">Här hittar du information och nyheter från polisen.</p>
+            
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Nyheter</h3>
+            <div class="news-item border-b border-gray-200 py-4">
+                <h4 class="text-lg font-bold text-gray-800">Trafikolycka i Stockholm</h4>
+                <p class="text-gray-600">En trafikolycka inträffade idag på E4:an. Inga allvarliga skador rapporterade.</p>
+            </div>
+            <div class="news-item border-b border-gray-200 py-4">
+                <h4 class="text-lg font-bold text-gray-800">Kampanj mot nätbedrägerier</h4>
+                <p class="text-gray-600">Polisen startar en ny kampanj för att öka medvetenheten om nätbedrägerier.</p>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Information till allmänheten</h3>
+            <p class="text-gray-600 leading-relaxed">Polisen arbetar för ett tryggare samhälle. Rapportera brott via 114 14 eller i nödfall 112.</p>
+            
+            <div id="search-bar" class="mt-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Sök på sidan</h3>
+                <input type="text" id="search-input" placeholder="Sök..." class="w-full p-2 border rounded-lg">
+                <button onclick="searchSite()" class="mt-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Sök</button>
+                <p id="search-result" class="text-gray-600 mt-2"></p>
+            </div>
         </section>
 
-        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Kontakt</h2>
-            <p class="text-gray-600 leading-relaxed">
-                <strong>Nödsituationer:</strong> Ring 112.<br>
-                <strong>Besök oss:</strong> Vår station ligger i Falun och Avesta, öppen för personlig hjälp.<br>
-                <strong>Kontakta oss:</strong> Skicka ett meddelande via formuläret här nere eller besök stationen.
-            </p>
+        <section id="tips" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Tipsa polisen</h2>
+            <p class="text-gray-600 leading-relaxed">Använd formuläret nedan för att skicka tips. (Du kan bädda in Google Docs här senare.)</p>
+            <div id="tips-form" class="space-y-4">
+                <input type="text" placeholder="Ditt namn (valfritt)" class="w-full p-2 border rounded-lg">
+                <input type="email" placeholder="Din e-post (valfritt)" class="w-full p-2 border rounded-lg">
+                <textarea placeholder="Ditt tips" class="w-full p-2 border rounded-lg h-32"></textarea>
+                <button type="button" onclick="submitTips()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Skicka tips</button>
+            </div>
+            <p id="tips-message" class="text-gray-600 mt-2"></p>
         </section>
 
-        <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Senaste nyheter</h2>
+        <section id="contact" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Kontaktinformation</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Kontakta polisen via telefon: 114 14 (icke-akut) eller 112 (nödfall).<br>
+                E-post: info@polisen.se
+            </p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Hitta polisstation</h3>
+            <p class="text-gray-600 leading-relaxed">Embeddad karta (t.ex. Google Maps):</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2034.996!2d18.068580!3d59.329323!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d6799554a6d%3A0x2a75f0e2e5d6e3a!2sPolisen%20Stockholm!5e0!3m2!1ssv!2sse!4v1693499999999!5m2!1ssv!2sse" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </section>
+
+        <section id="faq" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Vanliga frågor (FAQ)</h2>
             <ul class="text-gray-600 list-disc list-inside leading-relaxed">
-                <li></li>
-                <li></li>
-                <li></li>
+                <li><strong>Hur rapporterar jag ett brott?</strong> Ring 114 14 eller besök en polisstation.</li>
+                <li><strong>Vad gör jag i en nödsituation?</strong> Ring 112 omedelbart.</li>
+                <li><strong>Hur ansöker jag om pass?</strong> Boka tid via vår webbplats.</li>
             </ul>
         </section>
 
-        <div class="text-center">
-            <a href="index.html" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition fade-in">Tillbaka till startsidan</a>
-        </div>
+        <section id="emergency" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Nödsituationer</h2>
+            <p class="text-gray-600 leading-relaxed">I nödfall, ring 112.</p>
+            <p class="text-gray-600 leading-relaxed">Andra nödnummer:</p>
+            <ul class="text-gray-600 list-disc list-inside leading-relaxed">
+                <li>Sjukvårdsrådgivning: 1177</li>
+                <li>Giftinformation: 010-456 67 00</li>
+            </ul>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Sociala medier</h3>
+            <p class="text-gray-600 leading-relaxed">
+                Följ oss på: 
+                <a href="https://twitter.com/polisen" class="text-blue-600 hover:underline">Twitter</a> | 
+                <a href="https://facebook.com/polisen" class="text-blue-600 hover:underline">Facebook</a>
+            </p>
+        </section>
+
+        <section id="login" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Intern sida för anställda</h2>
+            <p class="text-gray-600 leading-relaxed">Logga in med dina uppgifter (demo: användarnamn 'admin', lösenord 'password').</p>
+            <div id="login-form" class="space-y-4">
+                <input type="text" id="username" placeholder="Användarnamn" class="w-full p-2 border rounded-lg" required>
+                <input type="password" id="password" placeholder="Lösenord" class="w-full p-2 border rounded-lg" required>
+                <button type="button" onclick="login()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Logga in</button>
+            </div>
+            <div id="internal-content" class="hidden mt-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Välkommen, anställd!</h3>
+                <p class="text-gray-600 leading-relaxed">Intern information: Aktuella ärenden, manualer, etc.</p>
+                <ul class="text-gray-600 list-disc list-inside leading-relaxed">
+                    <li>Ärende 1: Undersökning pågår.</li>
+                    <li>Manual: Hantering av tips.</li>
+                </ul>
+            </div>
+        </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-police text-white text-center p-4">
+        <p>&copy; 2025 Polisen.se - Demo för GitHub Pages</p>
+    </footer>
+
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/68b08d1f3213281928263265/1j3oqehc3';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function submitTips() {
+            document.getElementById('tips-message').innerText = 'Tack för ditt tips! Det har skickats.';
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (username === 'admin' && password === 'password') {
+                document.getElementById('internal-content').classList.remove('hidden');
+            } else {
+                alert('Felaktiga inloggningsuppgifter.');
+            }
+        }
+
+        function searchSite() {
+            const query = document.getElementById('search-input').value;
+            document.getElementById('search-result').innerText = `Sökresultat för "${query}": Inga resultat (demo).`;
+        }
+    </script>
+</body>
+</html>
