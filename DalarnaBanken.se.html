@@ -115,7 +115,7 @@
                 name: "Adrian Munter",
                 username: "AdrianMunter",
                 password: "1379",
-                balance: 108 035,
+                balance: 108035,
                 transactions: [
                     {
                         productName: "Testprodukt",
@@ -146,6 +146,21 @@
                 password: "546852",
                 balance: 0,
                 transactions: []
+            },
+            {
+                name: "Windskore",
+                username: "Windskore",
+                password: "wind123",
+                balance: 55000,
+                transactions: [
+                    {
+                        productName: "Inkommande transaktion",
+                        to: "DalNet RP",
+                        amount: 55000,
+                        paid: true,
+                        date: "2025-09-01"
+                    }
+                ]
             }
         ];
 
@@ -172,7 +187,7 @@
                 accountSection.classList.remove('hidden');
                 accountInfo.innerHTML = `
                     <strong>Välkommen, ${account.name}!</strong><br>
-                    Ditt saldo: <span class="text-emerald-600 font-bold">${account.balance}kr</span>
+                    Ditt saldo: <span class="text-emerald-600 font-bold">${account.balance.toLocaleString('sv-SE')} kr</span>
                 `;
                 if (account.transactions.length > 0) {
                     let transactionsHtml = '<ul class="space-y-4">';
@@ -181,7 +196,7 @@
                             <li class="border-b border-gray-200 pb-2">
                                 <strong>Namn på produkt:</strong> ${t.productName}<br>
                                 <strong>Till:</strong> ${t.to}<br>
-                                <strong>Summa:</strong> ${t.amount}kr<br>
+                                <strong>Summa:</strong> ${t.amount.toLocaleString('sv-SE')} kr<br>
                                 <strong>Betalat:</strong> ${t.paid ? 'Ja' : 'Nej'}<br>
                                 <strong>Datum:</strong> ${t.date}<br>
                             </li>
