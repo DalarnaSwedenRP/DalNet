@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polisen.se - Demo</title>
+    <title>Polisen.se</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -39,9 +39,7 @@
         <div class="max-w-7xl mx-auto flex justify-center space-x-6">
             <a onclick="showSection('home')" class="hover:text-blue-200 cursor-pointer">Startsida</a>
             <a onclick="showSection('tips')" class="hover:text-blue-200 cursor-pointer">Tipsa polisen</a>
-            <a onclick="showSection('contact')" class="hover:text-blue-200 cursor-pointer">Kontakt</a>
             <a onclick="showSection('faq')" class="hover:text-blue-200 cursor-pointer">Vanliga frågor</a>
-            <a onclick="showSection('emergency')" class="hover:text-blue-200 cursor-pointer">Nödsituationer</a>
             <a onclick="showSection('login')" class="hover:text-blue-200 cursor-pointer">Intern sida</a>
         </div>
     </nav>
@@ -50,17 +48,7 @@
     <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
         <section id="home" class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Välkommen till Polisen.se</h2>
-            <p class="text-gray-600 leading-relaxed">Här hittar du information och nyheter från polisen.</p>
-            
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Nyheter</h3>
-            <div class="news-item border-b border-gray-200 py-4">
-                <h4 class="text-lg font-bold text-gray-800">Trafikolycka i Stockholm</h4>
-                <p class="text-gray-600">En trafikolycka inträffade idag på E4:an. Inga allvarliga skador rapporterade.</p>
-            </div>
-            <div class="news-item border-b border-gray-200 py-4">
-                <h4 class="text-lg font-bold text-gray-800">Kampanj mot nätbedrägerier</h4>
-                <p class="text-gray-600">Polisen startar en ny kampanj för att öka medvetenheten om nätbedrägerier.</p>
-            </div>
+            <p class="text-gray-600 leading-relaxed">Här hittar du information från polisen.</p>
             
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Information till allmänheten</h3>
             <p class="text-gray-600 leading-relaxed">Polisen arbetar för ett tryggare samhälle. Rapportera brott via 114 14 eller i nödfall 112.</p>
@@ -75,25 +63,9 @@
 
         <section id="tips" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Tipsa polisen</h2>
-            <p class="text-gray-600 leading-relaxed">Använd formuläret nedan för att skicka tips. (Du kan bädda in Google Docs här senare.)</p>
-            <div id="tips-form" class="space-y-4">
-                <input type="text" placeholder="Ditt namn (valfritt)" class="w-full p-2 border rounded-lg">
-                <input type="email" placeholder="Din e-post (valfritt)" class="w-full p-2 border rounded-lg">
-                <textarea placeholder="Ditt tips" class="w-full p-2 border rounded-lg h-32"></textarea>
-                <button type="button" onclick="submitTips()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Skicka tips</button>
-            </div>
+            <p class="text-gray-600 leading-relaxed">Använd formuläret nedan för att skicka tips.</p>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScfW71xg8G1jz0QxtaKSWixOr57WH5WTaKjS9HLI-sP3364VA/viewform?embedded=true" width="640" height="677" frameborder="0" marginheight="0" marginwidth="0">Läser in…</iframe>
             <p id="tips-message" class="text-gray-600 mt-2"></p>
-        </section>
-
-        <section id="contact" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Kontaktinformation</h2>
-            <p class="text-gray-600 leading-relaxed">
-                Kontakta polisen via telefon: 114 14 (icke-akut) eller 112 (nödfall).<br>
-                E-post: info@polisen.se
-            </p>
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Hitta polisstation</h3>
-            <p class="text-gray-600 leading-relaxed">Embeddad karta (t.ex. Google Maps):</p>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2034.996!2d18.068580!3d59.329323!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d6799554a6d%3A0x2a75f0e2e5d6e3a!2sPolisen%20Stockholm!5e0!3m2!1ssv!2sse!4v1693499999999!5m2!1ssv!2sse" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </section>
 
         <section id="faq" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
@@ -105,25 +77,9 @@
             </ul>
         </section>
 
-        <section id="emergency" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Nödsituationer</h2>
-            <p class="text-gray-600 leading-relaxed">I nödfall, ring 112.</p>
-            <p class="text-gray-600 leading-relaxed">Andra nödnummer:</p>
-            <ul class="text-gray-600 list-disc list-inside leading-relaxed">
-                <li>Sjukvårdsrådgivning: 1177</li>
-                <li>Giftinformation: 010-456 67 00</li>
-            </ul>
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Sociala medier</h3>
-            <p class="text-gray-600 leading-relaxed">
-                Följ oss på: 
-                <a href="https://twitter.com/polisen" class="text-blue-600 hover:underline">Twitter</a> | 
-                <a href="https://facebook.com/polisen" class="text-blue-600 hover:underline">Facebook</a>
-            </p>
-        </section>
-
         <section id="login" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Intern sida för anställda</h2>
-            <p class="text-gray-600 leading-relaxed">Logga in med dina uppgifter (demo: användarnamn 'admin', lösenord 'password').</p>
+            <p class="text-gray-600 leading-relaxed">Logga in med dina uppgifter (t.ex. Adrian Munter, Kod: 1379 eller Benjamin Munter, Kod: 1234).</p>
             <div id="login-form" class="space-y-4">
                 <input type="text" id="username" placeholder="Användarnamn" class="w-full p-2 border rounded-lg" required>
                 <input type="password" id="password" placeholder="Lösenord" class="w-full p-2 border rounded-lg" required>
@@ -142,7 +98,7 @@
 
     <!-- Footer -->
     <footer class="bg-police text-white text-center p-4">
-        <p>&copy; 2025 Polisen.se - Demo för GitHub Pages</p>
+        <p>&copy; 2025 Polisen.se</p>
     </footer>
 
     <!-- Tawk.to Script -->
@@ -164,14 +120,11 @@
             document.getElementById(sectionId).classList.remove('hidden');
         }
 
-        function submitTips() {
-            document.getElementById('tips-message').innerText = 'Tack för ditt tips! Det har skickats.';
-        }
-
         function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            if (username === 'admin' && password === 'password') {
+            if ((username === 'Adrian Munter' && password === '1379') || 
+                (username === 'Benjamin Munter' && password === '1234')) {
                 document.getElementById('internal-content').classList.remove('hidden');
             } else {
                 alert('Felaktiga inloggningsuppgifter.');
