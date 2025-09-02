@@ -71,7 +71,54 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Ditt konto</h2>
             <p id="accountInfo" class="text-gray-600 leading-relaxed mb-4"></p>
             <h3 class="text-xl font-semibold text-gray-800 mb-2">Transaktioner</h3>
-            <div id="transactions" class="text-gray-600"></div>
+            <div id="transactions" class="text-gray-600 mb-6"></div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Lägg till transaktion</h3>
+            <div class="space-y-4">
+                <div>
+                    <label for="productName" class="block text-gray-600 mb-1">Produktnamn</label>
+                    <input
+                        type="text"
+                        id="productName"
+                        placeholder="Ange produktnamn"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+                <div>
+                    <label for="to" class="block text-gray-600 mb-1">Till</label>
+                    <input
+                        type="text"
+                        id="to"
+                        placeholder="Ange mottagare"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+                <div>
+                    <label for="amount" class="block text-gray-600 mb-1">Summa (kr)</label>
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="Ange summa"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+                <div>
+                    <label for="isIncoming" class="block text-gray-600 mb-1">Transaktionstyp</label>
+                    <select
+                        id="isIncoming"
+                        class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="false">Utgående</option>
+                        <option value="true">Inkommande</option>
+                    </select>
+                </div>
+                <button
+                    id="addTransactionButton"
+                    class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition"
+                >
+                    Lägg till transaktion
+                </button>
+                <p id="transactionError" class="text-red-500 text-center hidden">Fyll i alla fält och se till att summan är positiv!</p>
+            </div>
         </section>
 
         <section class="bg-white rounded-xl shadow-lg p-8 mb-8 hover-scale fade-in">
@@ -137,8 +184,16 @@
                 name: "Savanna",
                 username: "SavannaKolmodin",
                 password: "7895",
-                balance: 0,
-                transactions: []
+                balance: 67357,
+                transactions: [
+                    {
+                        productName: "Hyr Polisbil & Polisuniform",
+                        to: "Dalarna Bank",
+                        amount: 4200,
+                        paid: true,
+                        date: "2025-09-09"
+                    }
+                ]
             },
             {
                 name: "Emil",
@@ -151,7 +206,7 @@
                 name: "Windskore",
                 username: "Windskore",
                 password: "wind123",
-                balance: 55000,
+                balance: 205000, // Uppdaterat: 55000 + 150000 = 205000
                 transactions: [
                     {
                         productName: "Gjorde om polisens hemsida [Inkommande]",
@@ -159,6 +214,13 @@
                         amount: 55000,
                         paid: true,
                         date: "2025-09-01"
+                    },
+                    {
+                        productName: "Gjorde domstolens hemsida [Inkommande]",
+                        to: "Dalarna Bank",
+                        amount: 150000,
+                        paid: true,
+                        date: "2025-09-02"
                     }
                 ]
             }
@@ -172,7 +234,38 @@
         const loginError = document.getElementById('loginError');
         const accountInfo = document.getElementById('accountInfo');
         const transactionsDiv = document.getElementById('transactions');
+        const addTransactionButton = document.getElementById('addTransactionButton');
+        const productNameInput = document.getElementById('productName');
+        const toInput = document.getElementById('to');
+        const amountInput = document.getElementById('amount');
+        const isIncomingSelect = document.getElementById('isIncoming');
+        const transactionError = document.getElementById('transactionError');
 
+        let currentUser = null;
+
+        // Funktion för att visa transaktioner
+        function displayTransactions(account) {
+            if (account.transactions.length > 0) {
+                let transactionsHtml = '<ul class="space-y-4">';
+                account.transactions.forEach(t => {
+                    transactionsHtml += `
+                        <li class="border-b border-gray-200 pb-2">
+                            <strong>Namn på produkt:</strong> ${t.productName}<br>
+                            <strong>Till:</strong> ${t.to}<br>
+                            <strong>Summa:</strong> ${t.amount.toLocaleString('sv-SE')} kr<br>
+                            <strong>Betalat:</strong> ${t.paid ? 'Ja' : 'Nej'}<br>
+                            <strong>Datum:</strong> ${t.date}<br>
+                        </li>
+                    `;
+                });
+                transactionsHtml += '</ul>';
+                transactionsDiv.innerHTML = transactionsHtml;
+            } else {
+                transactionsDiv.innerHTML = '<p class="text-gray-600">Inga transaktioner att visa.</p>';
+            }
+        }
+
+        // Hantera inloggning
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
@@ -182,6 +275,7 @@
             );
 
             if (account) {
+                currentUser = account;
                 loginSection.classList.add('hidden');
                 loginError.classList.add('hidden');
                 accountSection.classList.remove('hidden');
@@ -189,27 +283,56 @@
                     <strong>Välkommen, ${account.name}!</strong><br>
                     Ditt saldo: <span class="text-emerald-600 font-bold">${account.balance.toLocaleString('sv-SE')} kr</span>
                 `;
-                if (account.transactions.length > 0) {
-                    let transactionsHtml = '<ul class="space-y-4">';
-                    account.transactions.forEach(t => {
-                        transactionsHtml += `
-                            <li class="border-b border-gray-200 pb-2">
-                                <strong>Namn på produkt:</strong> ${t.productName}<br>
-                                <strong>Till:</strong> ${t.to}<br>
-                                <strong>Summa:</strong> ${t.amount.toLocaleString('sv-SE')} kr<br>
-                                <strong>Betalat:</strong> ${t.paid ? 'Ja' : 'Nej'}<br>
-                                <strong>Datum:</strong> ${t.date}<br>
-                            </li>
-                        `;
-                    });
-                    transactionsHtml += '</ul>';
-                    transactionsDiv.innerHTML = transactionsHtml;
-                } else {
-                    transactionsDiv.innerHTML = '<p class="text-gray-600">Inga transaktioner att visa.</p>';
-                }
+                displayTransactions(account);
             } else {
                 loginError.classList.remove('hidden');
             }
+        });
+
+        // Hantera tillägg av transaktion
+        addTransactionButton.addEventListener('click', () => {
+            const productName = productNameInput.value.trim();
+            const to = toInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+            const isIncoming = isIncomingSelect.value === 'true';
+            const date = new Date().toISOString().split('T')[0]; // Dagens datum i YYYY-MM-DD-format
+
+            // Validering
+            if (!productName || !to || isNaN(amount) || amount <= 0) {
+                transactionError.classList.remove('hidden');
+                return;
+            }
+
+            // Skapa transaktion
+            const newTransaction = {
+                productName,
+                to,
+                amount,
+                paid: true, // Anta att transaktionen är betald
+                date
+            };
+
+            // Lägg till transaktion och uppdatera balans
+            currentUser.transactions.push(newTransaction);
+            if (isIncoming) {
+                currentUser.balance += amount;
+            } else {
+                currentUser.balance -= amount;
+            }
+
+            // Uppdatera kontovyn
+            accountInfo.innerHTML = `
+                <strong>Välkommen, ${currentUser.name}!</strong><br>
+                Ditt saldo: <span class="text-emerald-600 font-bold">${currentUser.balance.toLocaleString('sv-SE')} kr</span>
+            `;
+            displayTransactions(currentUser);
+
+            // Rensa formuläret
+            productNameInput.value = '';
+            toInput.value = '';
+            amountInput.value = '';
+            isIncomingSelect.value = 'false';
+            transactionError.classList.add('hidden');
         });
     </script>
     <!--Start of Tawk.to Script-->
