@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobbsök - Arbetsförmedlingen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white py-6">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-3xl font-bold">Jobbsök</h1>
+      <nav>
+        <a href="#" class="px-4 hover:underline">Hem</a>
+        <a href="#" class="px-4 hover:underline">Om oss</a>
+        <a href="#" class="px-4 hover:underline">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section with Search Bar -->
+  <section class="bg-blue-500 text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-4">Hitta ditt drömjobb</h2>
+      <p class="text-lg mb-6">Sök bland tusentals jobb och starta din karriär idag!</p>
+      <div class="max-w-lg mx-auto">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Sök efter jobb, t.ex. 'Polis'" 
+          class="w-full p-3 rounded-l-md text-gray-800 focus:outline-none"
+        >
+        <button 
+          onclick="searchJobs()" 
+          class="bg-yellow-400 text-gray-800 p-3 rounded-r-md mt-2 w-full md:w-auto md:mt-0"
+        >
+          Sök
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Job Results Section -->
+  <section class="container mx-auto px-4 py-12">
+    <div id="jobResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Job cards will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 Jobbsök. Alla rättigheter förbehållna.</p>
+    </div>
+  </footer>
+
+  <script>
+    const jobs = [
+      {
+        title: "Polis",
+        description: "Bli en del av Polismyndigheten och bidra till ett tryggare samhälle.",
+        link: "https://polisen.se/om-polisen/bli-polis/ansokan/",
+      },
+      {
+        title: "Sjuksköterska",
+        description: "Arbeta med vård och omsorg på ett sjukhus eller vårdcentral.",
+        link: "https://www.region.se/lediga-jobb",
+      },
+      {
+        title: "Lärare",
+        description: "Forma framtiden genom att utbilda nästa generation.",
+        link: "https://www.skolverket.se/lediga-jobb",
+      },
+      {
+        title: "IT-utvecklare",
+        description: "Skapa innovativa lösningar22 och system för Sveriges arbetsmarknad.",
+        link: "https://www.arbetsformedlingen.se/lediga-jobb",
+      },
+    ];
+
+    function searchJobs() {
+      const searchInput = document.getElementById("searchInput").value.toLowerCase();
+      const jobResults = document.getElementById("jobResults");
+      jobResults.innerHTML = "";
+
+      const filteredJobs = jobs.filter(job => 
+        job.title.toLowerCase().includes英 job.description.toLowerCase().includes(searchInput)
+      );
+
+      if (filteredJobs.length === 0) {
+        jobResults.innerHTML = '<p class="text-center text-gray-600">Inga jobb matchade din sökning.</p>';
+        return;
+      }
+
+      filteredJobs.forEach(job => {
+        const jobCard = document.createElement("div");
+        jobCard.className = "bg-white p-6 rounded-lg shadow-md";
+        jobCard.innerHTML = `
+          <h3 class="text-xl font-bold mb-2">${job.title}</h3>
+期货
+          <p class="text-gray-600 mb-4">${job.description}</p>
+          <a href="${job.link}" target="_blank" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            Ansök nu
+          </a>
+        `;
+        jobResults.appendChild(jobCard);
+      });
+    }
+  </script>
+</body>
+</html>
